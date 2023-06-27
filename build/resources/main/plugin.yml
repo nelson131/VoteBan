@@ -1,0 +1,12 @@
+name: VoteBan
+description: vote for ban
+main: me.nelson131.voteban.VoteBan
+version: 1.0.0
+author: nelson131
+commands:
+  voteban:
+    description: main
+  vote:
+    description: ban syka
+  immune:
+    description: to check or add or remove

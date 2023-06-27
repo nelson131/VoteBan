@@ -1,0 +1,12 @@
+name: VoteBan
+description: vote for bans and ban players without moderators
+main: me.nelson131.voteban.VoteBan
+version: 1.0.0
+author: nelson131
+commands:
+  voteban:
+    description: create a voteban poll
+  vote:
+    description: vote for somebody
+  immune:
+    description: add,check or remove immune players

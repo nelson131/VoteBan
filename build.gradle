@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group = 'me.nelson131.voteban'
+version = '1.0.0'
+
+repositories {
+    maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
+}
+
+dependencies {
+    compileOnly("io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT")
+}
+
+test {
+    useJUnitPlatform()
+}
