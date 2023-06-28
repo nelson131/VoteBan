@@ -27,5 +27,10 @@ immune-get-false: " is not an immune player!"
 immune-remove: " has been removed from immune players!"
 
 ban-msg: "You are banned by /voteban with reason: "
-
 vote-counted: "Your vote has been counted!"
+
+list-title-1: "List of "
+list-title-2: "players: "
+list-total: "Total: "
+list-isAFK: "IsAFK: "
+list-without-afk: "Without AFK: "

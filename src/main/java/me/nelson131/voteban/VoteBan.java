@@ -2,6 +2,7 @@ package me.nelson131.voteban;
 
 import me.nelson131.voteban.afk.ConnectionListener;
 import me.nelson131.voteban.afk.MoveListener;
+import me.nelson131.voteban.afk.PlayersListCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -32,6 +33,7 @@ public class VoteBan extends JavaPlugin {
         getCommand("voteban").setExecutor(new PollCommand());
         getCommand("vote").setExecutor(new VoteCommand());
         getCommand("immune").setExecutor(new ImmunityCommand());
+        getCommand("players").setExecutor(new PlayersListCommand());
 
         getServer().getPluginManager().registerEvents(new ConnectionListener(), this);
         getServer().getPluginManager().registerEvents(new MoveListener(), this);

@@ -69,6 +69,6 @@ public class ImmunityCommand implements CommandExecutor {
     }
 
     private static void Missing(Player player){
-        player.sendMessage(ChatColor.RED + plugin.getConfig().getString("missing-args") + ChatColor.WHITE + plugin.getConfig().getString("immune-usage"));
+        player.sendMessage("*" + ChatColor.RED + plugin.getConfig().getString("missing-args") + ChatColor.WHITE + plugin.getConfig().getString("immune-usage"));
     }
 }

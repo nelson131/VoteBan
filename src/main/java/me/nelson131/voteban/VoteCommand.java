@@ -63,7 +63,7 @@ public class VoteCommand implements CommandExecutor {
 
                 int count = getVote(targetUUID);
 
-                if(count == CountWithoutAFK()){
+                if(count == CountWithoutAFK()/2){
                     ban(target);
                     clearVote(targetUUID);
                     clearReason(targetUUID);
@@ -88,18 +88,18 @@ public class VoteCommand implements CommandExecutor {
     }
 
     private static void Missing(Player player){
-        player.sendMessage(org.bukkit.ChatColor.RED + plugin.getConfig().getString("missing-args") + org.bukkit.ChatColor.WHITE + plugin.getConfig().getString("vote-usage"));
+        player.sendMessage("* " + org.bukkit.ChatColor.RED + plugin.getConfig().getString("missing-args") + org.bukkit.ChatColor.WHITE + plugin.getConfig().getString("vote-usage"));
     }
 
     private static void UUIDNull(Player player){
-        player.sendMessage(ChatColor.RED + plugin.getConfig().getString("uuid-null") + plugin.getConfig().getString("vote-usage"));
+        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("uuid-null") + plugin.getConfig().getString("vote-usage"));
     }
 
     private static void ActivePolls(Player player){
-        player.sendMessage(ChatColor.RED + plugin.getConfig().getString("active-polls"));
+        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("active-polls"));
     }
 
     private static void Cooldown(Player player){
-        player.sendMessage(ChatColor.RED + plugin.getConfig().getString("cooldown"));
+        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("cooldown"));
     }
 }

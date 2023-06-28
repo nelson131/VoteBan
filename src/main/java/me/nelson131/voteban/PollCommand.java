@@ -95,23 +95,23 @@ public class PollCommand implements CommandExecutor {
     }
 
     private static void Missing(Player player){
-        player.sendMessage(ChatColor.RED + plugin.getConfig().getString("missing-args") + ChatColor.WHITE + plugin.getConfig().getString("voteban-usage"));
+        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("missing-args") + ChatColor.WHITE + plugin.getConfig().getString("voteban-usage"));
     }
 
     private static void Immune(Player player, String targetname){
-        player.sendMessage(ChatColor.RED + targetname + ChatColor.WHITE + plugin.getConfig().getString("ban-immune-text") + ChatColor.RED + plugin.getConfig().getString("ban-immune"));
+        player.sendMessage("* " + ChatColor.RED + targetname + ChatColor.WHITE + plugin.getConfig().getString("ban-immune-text") + ChatColor.RED + plugin.getConfig().getString("ban-immune"));
     }
 
     private static void Ban(Player player){
-        player.sendMessage(ChatColor.RED + plugin.getConfig().getString("ban-yourself"));
+        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("ban-yourself"));
     }
 
     private static void Repeat(Player player){
-        player.sendMessage(ChatColor.RED + plugin.getConfig().getString("repeat"));
+        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("repeat"));
     }
 
     private static void UUIDNull(Player player){
-        player.sendMessage(net.md_5.bungee.api.ChatColor.RED + plugin.getConfig().getString("uuid-null") + plugin.getConfig().getString("voteban-usage"));
+        player.sendMessage("* " + net.md_5.bungee.api.ChatColor.RED + plugin.getConfig().getString("uuid-null") + plugin.getConfig().getString("voteban-usage"));
     }
 }
 

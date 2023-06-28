@@ -1,12 +1,14 @@
 name: VoteBan
-description: vote for ban
+description: vote for bans and ban players without moderators
 main: me.nelson131.voteban.VoteBan
 version: 1.0.0
 author: nelson131
 commands:
   voteban:
-    description: main
+    description: create a voteban poll
   vote:
-    description: ban syka
+    description: vote for somebody
   immune:
-    description: to check or add or remove
+    description: add,check or remove immune players
+  players:
+    description: get the list of players with count of total,afk and without afk
