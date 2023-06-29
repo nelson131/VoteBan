@@ -2,24 +2,21 @@ package me.nelson131.voteban.util;
 
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 import static me.nelson131.voteban.VoteBan.active;
 
 public class ActivePolls {
 
-    public static void addActive(Player player){
-        active.add(player);
+    public static void addActive(UUID uuid){
+        active.add(uuid);
     }
 
-    public static boolean getActive(Player player){
-        if(active.contains(player)){
-            return true;
-        }
-        else {
-            return false;
-        }
+    public static boolean getActive(UUID uuid){
+        return active.contains(uuid);
     }
 
-    public static void removeActive(Player player){
-        active.remove(player);
+    public static void removeActive(UUID uuid){
+        active.remove(uuid);
     }
 }

@@ -16,11 +16,12 @@ public class MoveListener implements Listener {
         Player player = event.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
-        if(isAFK(playerUUID) == true){
+        if(isAFK(playerUUID)){
             playerStop(playerUUID);
         }
         else {
             playerMove(playerUUID);
         }
+
     }
 }

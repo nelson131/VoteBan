@@ -38,14 +38,12 @@ public class AFKManager {
     }
 
     public static int CountWithoutAFK(){
-        int countWithoutAFK = movements.size();
-        return countWithoutAFK;
+        return movements.size();
     }
 
     public static int CountOnlyAFK(){
         int countMove = movements.size();
         int countTotal = Bukkit.getOnlinePlayers().size();
-        int countAFK =  countTotal - countMove;
-        return countAFK;
+        return countTotal - countMove;
     }
 }

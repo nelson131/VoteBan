@@ -18,7 +18,7 @@ public class VoteBan extends JavaPlugin {
     public static Map<UUID, String> reasons = new HashMap<>();
     public static Map<UUID, Set<UUID>> cooldowns = new HashMap<>();
     public static Map<UUID, Boolean> repeats = new HashMap<>();
-    public static List<Player> active = new ArrayList<>();
+    public static Set<UUID> active = new HashSet<>();
 
     FileConfiguration config = getConfig();
 

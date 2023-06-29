@@ -15,15 +15,8 @@ public class Cooldowns {
     }
 
     public static Boolean checkCooldown(UUID player, UUID target){
-        if(cooldowns.get(player) == null){
-            return false;
-        }
-        if(cooldowns.get(player).contains(target)){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if(cooldowns.get(player) == null) return false;
+        return cooldowns.get(player).contains(target);
     }
 
     public static void removeCooldown(UUID player, UUID target){

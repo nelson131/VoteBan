@@ -2,6 +2,8 @@
 
 immunePlayers: []
 
+prefix: "* "
+
 voteban-usage: "/voteban <player> <reason>"
 immune-usage: "/immune <add:get:remove> <player>"
 vote-usage: "/vote <player>"
@@ -14,6 +16,7 @@ cooldown: "You already voted for this player!"
 ban-yourself: "You cant ban yourself!"
 ban-immune-text: " is an immune player. "
 ban-immune: "Sorry, but you cant ban an immune player!"
+ban-text: "has been banned with reason: "
 repeat: "Poll is already open! You cant open again"
 
 component-1: " created a poll"

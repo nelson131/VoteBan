@@ -15,12 +15,7 @@ public class ImmunePlayers {
     }
 
     public static boolean getImmune(String name){
-        if(plugin.getConfig().getList("immunePlayers").contains(name)){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return plugin.getConfig().getList("immunePlayers").contains(name);
     }
 
     public static void clearImmune(String name){

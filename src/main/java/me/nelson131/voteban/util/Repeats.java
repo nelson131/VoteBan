@@ -11,11 +11,8 @@ public class Repeats {
     }
 
     public static Boolean getRepeats(UUID uuid){
-        Boolean bool = repeats.get(uuid);
-        if(bool == null){
-            bool = false;
-        }
-        return bool;
+        if(repeats.get(uuid) == null) return false;
+        return repeats.get(uuid);
     }
 
     public static void removeRepeats(UUID uuid){

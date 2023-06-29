@@ -1,7 +1,8 @@
 package me.nelson131.voteban;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 import static me.nelson131.voteban.VoteBan.plugin;
 import static me.nelson131.voteban.util.ActivePolls.addActive;
+import static me.nelson131.voteban.util.Config.*;
 import static me.nelson131.voteban.util.ImmunePlayers.getImmune;
 import static me.nelson131.voteban.util.PlayerUUID.addReason;
 import static me.nelson131.voteban.util.Repeats.addRepeats;
@@ -21,72 +23,90 @@ import static me.nelson131.voteban.util.Repeats.getRepeats;
 
 public class PollCommand implements CommandExecutor {
 
-    private String targetname;
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Player player = (Player) sender;
 
-        if(!(sender instanceof Player)){
-            sender.sendMessage(plugin.getConfig().getString("no-player"));
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(prefix() + getCFG("no-player"));
             return false;
         }
-        if(command.getName().equalsIgnoreCase("voteban")){
+        if (command.getName().equalsIgnoreCase("voteban")) {
+            Player player = (Player) sender;
+            Player target = Bukkit.getPlayer(args[0]);
 
-            if(args.length == 0){
-                Missing(player);
+            if(target == null){
+                uuidNull(player);
                 return false;
             }
-            Player target = Bukkit.getPlayer(args[0]);
+
             UUID targetUUID = target.getUniqueId();
             UUID playerUUID = player.getUniqueId();
+
+            String targetname = target.getName();
 
             Boolean status = getImmune(targetname);
             Boolean repeat = getRepeats(playerUUID);
 
-            targetname = target.getName();
 
-            if(targetname == player.getName()){
-                Ban(player);
+
+            if (args.length == 0) {
+                missing(player);
                 return false;
             }
 
-            if(status == true){
-                Immune(player, targetname);
+//            if (targetname == player.getName()) {
+//                ban(player);
+//                return false;
+//            }
+
+            if (status == true) {
+                immune(player, targetname);
                 return false;
             }
 
-            if(repeat == true){
-                Repeat(player);
+            if (repeat == true) {
+                repeat(player);
                 return false;
             }
 
-            if(playerUUID == null){
-                UUIDNull(player);
+            if (playerUUID == null) {
+                uuidNull(player);
                 return false;
             }
-
-
-            else{
+            else {
                 addRepeats(playerUUID);
 
                 StringBuilder builder = new StringBuilder();
-                for(int i = 1; i <args.length; i++){
+                for (int i = 1; i < args.length; i++) {
                     builder.append(args[i]);
                     builder.append(" ");
                 }
                 String reason = builder.toString();
                 reason = reason.stripTrailing();
 
-                for (Player player1 : Bukkit.getOnlinePlayers()){
-                    TextComponent message = new TextComponent("* " + ChatColor.RED + player.getDisplayName() + ChatColor.WHITE + plugin.getConfig().getString("component-1"));
-                    TextComponent message1 = new TextComponent("\n* " + ChatColor.WHITE + plugin.getConfig().getString("component-2") + ChatColor.RED + target.getDisplayName());
-                    TextComponent message2 = new TextComponent(ChatColor.WHITE + "\n* "+ plugin.getConfig().getString("component-3") + ChatColor.RED + reason);
-                    TextComponent message3 = new TextComponent(ChatColor.GREEN + "\n" + plugin.getConfig().getString("button"));
-                    message3.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/vote " + targetname));
+                for (Player player1 : Bukkit.getOnlinePlayers()) {
+
+                    Component component = Component.text()
+                            .content(prefix()).color(colorWhite())
+                            .append(Component.text().content(player.getDisplayName()).color(colorRed()))
+                            .append(Component.text().content(getCFG("component-1")).color(colorWhite()))
+                            .appendNewline()
+                            .append(Component.text().content(prefix()).color(TextColor.color(colorWhite()))
+                            .append(Component.text().content(getCFG("component-2")).color(colorWhite())))
+                            .append(Component.text().content(targetname).color(colorRed()))
+                            .appendNewline()
+                            .append(Component.text().content(prefix())).color(colorWhite())
+                            .append(Component.text().content(getCFG("component-3")).color(colorWhite()))
+                            .append(Component.text().content(reason).color(colorRed()))
+                            .appendNewline()
+                            .append(Component.text().content(prefix()).color(colorWhite()))
+                            .append(Component.text().content(getCFG("button")).color(colorGreen()))
+                            .clickEvent(ClickEvent.runCommand("/vote " + targetname))
+                            .build();
 
                     addReason(targetUUID, reason);
-                    addActive(player);
-                    player1.sendMessage(message, message1, message2, message3);
+                    addActive(playerUUID);
+                    player1.sendMessage(component);
 
                 }
             }
@@ -94,24 +114,48 @@ public class PollCommand implements CommandExecutor {
         return true;
     }
 
-    private static void Missing(Player player){
-        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("missing-args") + ChatColor.WHITE + plugin.getConfig().getString("voteban-usage"));
+    private static void missing(Player player) {
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(getCFG("missing-args")).color(colorRed()))
+                        .append(Component.text().content(getCFG("voteban-usage")).color(colorWhite()))
+                        .build()
+        );
     }
 
-    private static void Immune(Player player, String targetname){
-        player.sendMessage("* " + ChatColor.RED + targetname + ChatColor.WHITE + plugin.getConfig().getString("ban-immune-text") + ChatColor.RED + plugin.getConfig().getString("ban-immune"));
+    private static void immune(Player player, String targetname) {
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(targetname).color(colorRed()))
+                        .append(Component.text().content(getCFG("ban-immune-text")).color(colorWhite()))
+                        .append(Component.text().content(getCFG("ban-immune")).color(colorRed()))
+                        .build()
+        );
     }
 
-    private static void Ban(Player player){
-        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("ban-yourself"));
+    private static void ban(Player player) {
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(getCFG("ban-yourself")).color(colorRed()))
+                        .build()
+        );
     }
 
-    private static void Repeat(Player player){
-        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("repeat"));
+    private static void repeat(Player player) {
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(getCFG("repeat")).color(colorRed()))
+                        .build()
+        );
     }
 
-    private static void UUIDNull(Player player){
-        player.sendMessage("* " + net.md_5.bungee.api.ChatColor.RED + plugin.getConfig().getString("uuid-null") + plugin.getConfig().getString("voteban-usage"));
+    private static void uuidNull(Player player) {
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(getCFG("uuid-null")).color(colorRed()))
+                        .append(Component.text().content(getCFG("voteban-usage")).color(colorWhite()))
+                        .build()
+        );
     }
 }
 

@@ -1,6 +1,8 @@
 package me.nelson131.voteban;
 
 import me.nelson131.voteban.util.ActivePolls;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.BanList;
@@ -17,89 +19,118 @@ import java.util.UUID;
 import static me.nelson131.voteban.VoteBan.*;
 import static me.nelson131.voteban.afk.AFKManager.*;
 import static me.nelson131.voteban.util.ActivePolls.getActive;
+import static me.nelson131.voteban.util.ActivePolls.removeActive;
+import static me.nelson131.voteban.util.Config.*;
 import static me.nelson131.voteban.util.Cooldowns.*;
 import static me.nelson131.voteban.util.PlayerUUID.*;
 import static me.nelson131.voteban.util.Repeats.removeRepeats;
 
 public class VoteCommand implements CommandExecutor {
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Player player = (Player) sender;
-        Player target = Bukkit.getPlayer(args[0]);
-        UUID targetUUID = target.getUniqueId();
-        UUID playerUUID = player.getUniqueId();
 
-        if(!(sender instanceof Player)){
-            sender.sendMessage(plugin.getConfig().getString("no-player"));
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(
+                    prefix() + getCFG("no-player"));
             return false;
         }
-        if(command.getName().equalsIgnoreCase("vote")){
-            if(args.length == 0){
-                Missing(player);
+        if (command.getName().equalsIgnoreCase("vote")) {
+            Player player = (Player) sender;
+            Player target = Bukkit.getPlayer(args[0]);
+            UUID targetUUID = target.getUniqueId();
+            UUID playerUUID = player.getUniqueId();
+
+            if (args.length == 0) {
+                missing(player);
                 return false;
             }
 
-            if(checkCooldown(playerUUID, targetUUID)){
-                Cooldown(player);
+            if (checkCooldown(playerUUID, targetUUID)) {
+                cooldown(player);
                 return false;
             }
 
-            if(playerUUID == null){
-                UUIDNull(player);
+            if (playerUUID == null) {
+                uUIDNull(player);
                 return false;
             }
 
-            if(getActive(player) == false){
-                ActivePolls(player);
+            if (getActive(playerUUID) == false) {
+                activePolls(player);
                 return false;
+
             }
 
             else {
-                TextComponent textComponent = new TextComponent(ChatColor.GREEN + plugin.getConfig().getString("vote-counted"));
-
                 addVote(targetUUID);
                 addCooldown(playerUUID, targetUUID);
-                sender.sendMessage(textComponent);
 
-                int count = getVote(targetUUID);
+                sender.sendMessage(
+                        Component.text().content(prefix())
+                                .append(Component.text().content(getCFG("vote-counted")).color(colorGreen()))
+                                .build()
+                );
 
-                if(count == CountWithoutAFK()/2){
-                    ban(target);
-                    clearVote(targetUUID);
-                    clearReason(targetUUID);
-                    removeCooldown(playerUUID, targetUUID);
-                    removeRepeats(playerUUID);
-                    return true;
+                if (getVote(targetUUID) == CountWithoutAFK() / 2) {
+                        ban(target);
+                        clearVote(targetUUID);
+                        clearReason(targetUUID);
+                        removeCooldown(playerUUID, targetUUID);
+                        removeRepeats(playerUUID);
+                        removeActive(playerUUID);
                 }
             }
         }
         return true;
     }
 
-    public static void ban(Player player){
-        Date date = new Date(System.currentTimeMillis()+60*60*1000);
+    public static void ban(Player player) {
+        Date date = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
         String reason = getReason(player.getUniqueId());
 
         Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), reason, date, null);
-        for (Player player1 : Bukkit.getOnlinePlayers()){
-            player1.sendMessage(org.bukkit.ChatColor.WHITE + player.getName() + "has been banned with reason: " + org.bukkit.ChatColor.RED + reason);
+        for (Player player1 : Bukkit.getOnlinePlayers()) {
+            player1.sendMessage(
+                    Component.text().content(prefix() + player.getName()).color(colorWhite())
+                            .append(Component.text().content(reason).color(colorRed()))
+                            .build()
+            );
         }
-        player.kickPlayer(plugin.getConfig().getString("ban-msg") + reason);
+        player.kickPlayer(getCFG("ban-msg") + reason);
     }
 
-    private static void Missing(Player player){
-        player.sendMessage("* " + org.bukkit.ChatColor.RED + plugin.getConfig().getString("missing-args") + org.bukkit.ChatColor.WHITE + plugin.getConfig().getString("vote-usage"));
+    private static void missing(Player player) {
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(getCFG("missing-args")).color(colorRed()))
+                        .append(Component.text().content(getCFG("vote-usage")).color(colorWhite()))
+                        .build()
+        );
     }
 
-    private static void UUIDNull(Player player){
-        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("uuid-null") + plugin.getConfig().getString("vote-usage"));
+    private static void uUIDNull(Player player) {
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(getCFG("uuid-null")).color(colorRed()))
+                        .append(Component.text().content(getCFG("vote-usage")).color(colorWhite()))
+                        .build()
+        );
     }
 
-    private static void ActivePolls(Player player){
-        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("active-polls"));
+    private static void activePolls(Player player) {
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(getCFG("active-polls")).color(colorRed()))
+                        .build()
+        );
     }
 
-    private static void Cooldown(Player player){
-        player.sendMessage("* " + ChatColor.RED + plugin.getConfig().getString("cooldown"));
+    private static void cooldown(Player player) {
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(getCFG("cooldown")).color(colorRed()))
+                        .build()
+        );
     }
 }
