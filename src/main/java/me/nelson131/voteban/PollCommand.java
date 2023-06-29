@@ -54,10 +54,10 @@ public class PollCommand implements CommandExecutor {
                 return false;
             }
 
-//            if (targetname == player.getName()) {
-//                ban(player);
-//                return false;
-//            }
+            if (targetname == player.getName()) {
+                ban(player);
+                return false;
+            }
 
             if (status == true) {
                 immune(player, targetname);
