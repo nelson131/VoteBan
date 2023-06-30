@@ -29,12 +29,14 @@ public class AFKManager {
     public static boolean isAFK(UUID player){
         long time = System.currentTimeMillis() - movements.get(player);
 
-        if(time >= 300000){
-            return true;
-        }
-        else {
-            return false;
-        }
+//        if(time >= 300000){
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+
+        return time >= 300000;
     }
 
     public static int CountWithoutAFK(){

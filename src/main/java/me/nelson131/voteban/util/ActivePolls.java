@@ -1,7 +1,5 @@
 package me.nelson131.voteban.util;
 
-import org.bukkit.entity.Player;
-
 import java.util.UUID;
 
 import static me.nelson131.voteban.VoteBan.active;

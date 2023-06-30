@@ -14,7 +14,7 @@ public class Cooldowns {
         cooldowns.put(player, targets);
     }
 
-    public static Boolean checkCooldown(UUID player, UUID target){
+    public static boolean checkCooldown(UUID player, UUID target){
         if(cooldowns.get(player) == null) return false;
         return cooldowns.get(player).contains(target);
     }

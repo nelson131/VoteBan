@@ -22,6 +22,7 @@ import static me.nelson131.voteban.util.ActivePolls.getActive;
 import static me.nelson131.voteban.util.ActivePolls.removeActive;
 import static me.nelson131.voteban.util.Config.*;
 import static me.nelson131.voteban.util.Cooldowns.*;
+import static me.nelson131.voteban.util.MessageBuilder.*;
 import static me.nelson131.voteban.util.PlayerUUID.*;
 import static me.nelson131.voteban.util.Repeats.removeRepeats;
 
@@ -31,46 +32,41 @@ public class VoteCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(
-                    prefix() + getCFG("no-player"));
+            noPlayer((Player) sender);
             return false;
         }
         if (command.getName().equalsIgnoreCase("vote")) {
             Player player = (Player) sender;
+
+            if (args.length == 0) {
+                missingArgs(player, "vote-usage");
+                return true;
+            }
+
             Player target = Bukkit.getPlayer(args[0]);
+
+            if(target == null){
+                uuidNull(player, "vote-usage");
+                return true;
+            }
+
             UUID targetUUID = target.getUniqueId();
             UUID playerUUID = player.getUniqueId();
 
-            if (args.length == 0) {
-                missing(player);
-                return false;
-            }
-
             if (checkCooldown(playerUUID, targetUUID)) {
                 cooldown(player);
-                return false;
+                return true;
             }
 
-            if (playerUUID == null) {
-                uUIDNull(player);
-                return false;
-            }
-
-            if (getActive(playerUUID) == false) {
-                activePolls(player);
-                return false;
-
+            if (!getActive(playerUUID)) {
+                noActivePolls(player);
+                return true;
             }
 
             else {
                 addVote(targetUUID);
                 addCooldown(playerUUID, targetUUID);
-
-                sender.sendMessage(
-                        Component.text().content(prefix())
-                                .append(Component.text().content(getCFG("vote-counted")).color(colorGreen()))
-                                .build()
-                );
+                voteCounted(player);
 
                 if (getVote(targetUUID) == CountWithoutAFK() / 2) {
                         ban(target);
@@ -91,46 +87,9 @@ public class VoteCommand implements CommandExecutor {
 
         Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), reason, date, null);
         for (Player player1 : Bukkit.getOnlinePlayers()) {
-            player1.sendMessage(
-                    Component.text().content(prefix() + player.getName()).color(colorWhite())
-                            .append(Component.text().content(reason).color(colorRed()))
-                            .build()
-            );
+            banned(player1, reason);
         }
         player.kickPlayer(getCFG("ban-msg") + reason);
     }
 
-    private static void missing(Player player) {
-        player.sendMessage(
-                Component.text().content(prefix())
-                        .append(Component.text().content(getCFG("missing-args")).color(colorRed()))
-                        .append(Component.text().content(getCFG("vote-usage")).color(colorWhite()))
-                        .build()
-        );
-    }
-
-    private static void uUIDNull(Player player) {
-        player.sendMessage(
-                Component.text().content(prefix())
-                        .append(Component.text().content(getCFG("uuid-null")).color(colorRed()))
-                        .append(Component.text().content(getCFG("vote-usage")).color(colorWhite()))
-                        .build()
-        );
-    }
-
-    private static void activePolls(Player player) {
-        player.sendMessage(
-                Component.text().content(prefix())
-                        .append(Component.text().content(getCFG("active-polls")).color(colorRed()))
-                        .build()
-        );
-    }
-
-    private static void cooldown(Player player) {
-        player.sendMessage(
-                Component.text().content(prefix())
-                        .append(Component.text().content(getCFG("cooldown")).color(colorRed()))
-                        .build()
-        );
-    }
 }

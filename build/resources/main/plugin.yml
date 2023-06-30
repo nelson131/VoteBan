@@ -1,7 +1,7 @@
 name: VoteBan
 description: vote for bans and ban players without moderators
 main: me.nelson131.voteban.VoteBan
-version: 1.0.0
+version: 1.0.1
 author: nelson131
 commands:
   voteban:

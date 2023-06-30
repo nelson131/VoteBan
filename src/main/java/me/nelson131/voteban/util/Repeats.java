@@ -10,9 +10,8 @@ public class Repeats {
         repeats.put(uuid, true);
     }
 
-    public static Boolean getRepeats(UUID uuid){
-        if(repeats.get(uuid) == null) return false;
-        return repeats.get(uuid);
+    public static boolean getRepeats(UUID uuid){
+        return repeats.getOrDefault(uuid, false);
     }
 
     public static void removeRepeats(UUID uuid){
