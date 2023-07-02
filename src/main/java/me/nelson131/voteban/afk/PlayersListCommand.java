@@ -17,10 +17,10 @@ public class PlayersListCommand implements CommandExecutor {
             noPlayer((Player) sender);
             return true;
         }
-        if(command.getName().equalsIgnoreCase("players")){
-            Player player = (Player) sender;
-            playerList(player, TotalCount());
-        }
+
+        Player player = (Player) sender;
+        playerList(player, TotalCount());
+
         return true;
     }
 

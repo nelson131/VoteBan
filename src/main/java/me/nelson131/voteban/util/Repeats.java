@@ -1,20 +1,18 @@
 package me.nelson131.voteban.util;
 
-import java.util.UUID;
-
 import static me.nelson131.voteban.VoteBan.repeats;
 
 public class Repeats {
 
-    public static void addRepeats(UUID uuid){
-        repeats.put(uuid, true);
+    public static void addRepeats(String key){
+        repeats.put(key, true);
     }
 
-    public static boolean getRepeats(UUID uuid){
-        return repeats.getOrDefault(uuid, false);
+    public static boolean getRepeats(String key){
+        return repeats.getOrDefault(key, false);
     }
 
-    public static void removeRepeats(UUID uuid){
-        repeats.remove(uuid);
+    public static void removeRepeats(String key){
+        repeats.remove(key);
     }
 }

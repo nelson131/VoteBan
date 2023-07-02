@@ -12,7 +12,7 @@ import static me.nelson131.voteban.util.Config.*;
 public class MessageBuilder {
 
     public static void pollCreated(Player player1, Player player, String targetname, String reason){
-        player.sendMessage(
+        player1.sendMessage(
                 Component.text()
                         .content(prefix()).color(colorWhite())
                         .append(Component.text().content(player.getDisplayName()).color(colorRed()))
@@ -35,7 +35,7 @@ public class MessageBuilder {
 
     public static void noPlayer(Player player){
         player.sendMessage(
-                prefix() + getCFG("no-player")
+                Component.text().content(prefix() + getCFG("no-player")).build()
         );
     }
 
@@ -83,18 +83,9 @@ public class MessageBuilder {
 
     public static void banned(Player player, String reason){
         player.sendMessage(
-                Component.text().content(prefix() + player.getName()).color(colorWhite())
-                        .append(Component.text().content(reason).color(colorRed()))
-                        .build()
-        );
-    }
-
-    public static void immune(Player player, String targetname) {
-        player.sendMessage(
                 Component.text().content(prefix())
-                        .append(Component.text().content(targetname).color(colorRed()))
-                        .append(Component.text().content(getCFG("ban-immune-text")).color(colorWhite()))
-                        .append(Component.text().content(getCFG("ban-immune")).color(colorRed()))
+                        .append(Component.text().content(getCFG("banned-message")).color(colorRed()))
+                        .append(Component.text().content(reason).color(colorWhite()))
                         .build()
         );
     }
@@ -111,42 +102,6 @@ public class MessageBuilder {
         player.sendMessage(
                 Component.text().content(prefix())
                         .append(Component.text().content(getCFG("repeat")).color(colorRed()))
-                        .build()
-        );
-    }
-
-    public static void appendImmune(Player player, String targetName){
-        player.sendMessage(
-                Component.text().content(prefix())
-                        .append(Component.text().content(targetName).color(colorRed()))
-                        .append(Component.text().content(getCFG("immune-add")).color(colorWhite()))
-                        .build()
-        );
-    }
-
-    public static void pullImmune(Player player, String targetName){
-        player.sendMessage(
-                Component.text().content(prefix())
-                        .append(Component.text().content(targetName).color(colorRed()))
-                        .append(Component.text().content(getCFG("immune-remove")).color(colorWhite()))
-                        .build()
-        );
-    }
-
-    public static void getImmuneTrue(Player player, String targetName){
-        player.sendMessage(
-                Component.text().content(prefix())
-                        .append(Component.text().content(targetName).color(colorRed()))
-                        .append(Component.text().content(getCFG("immune-get-true")).color(colorWhite()))
-                        .build()
-        );
-    }
-
-    public static void getImmuneFalse(Player player, String targetName){
-        player.sendMessage(
-                Component.text().content(prefix())
-                        .append(Component.text().content(targetName).color(colorRed()))
-                        .append(Component.text().content(getCFG("immune-get-false")).color(colorWhite()))
                         .build()
         );
     }
@@ -168,6 +123,25 @@ public class MessageBuilder {
                         .append(Component.text().content(prefix()))
                         .append(Component.text().content(getCFG("list-without-afk")).color(colorWhite()))
                         .append(Component.text(CountWithoutAFK()).color(colorRed()))
+                        .build()
+        );
+    }
+
+    public static void permissionCheck(Player player){
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(player.getName()).color(colorRed()))
+                        .append(Component.text().content(getCFG("ban-immune-text")).color(colorWhite()))
+                        .appendNewline()
+                        .append(Component.text().content(getCFG("ban-immune")).color(colorRed()))
+                        .build()
+        );
+    }
+
+    public static void voteYourself(Player player){
+        player.sendMessage(
+                Component.text().content(prefix())
+                        .append(Component.text().content(getCFG("vote-yourself")).color(colorRed()))
                         .build()
         );
     }

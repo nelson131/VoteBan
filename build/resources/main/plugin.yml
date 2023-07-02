@@ -12,3 +12,6 @@ commands:
     description: add,check or remove immune players
   players:
     description: get the list of players with count of total,afk and without afk
+permissions:
+  voteban.immune:
+    description: immunity for player

@@ -1,8 +1,6 @@
 package me.nelson131.voteban.afk;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -28,14 +26,6 @@ public class AFKManager {
 
     public static boolean isAFK(UUID player){
         long time = System.currentTimeMillis() - movements.get(player);
-
-//        if(time >= 300000){
-//            return true;
-//        }
-//        else {
-//            return false;
-//        }
-
         return time >= 300000;
     }
 

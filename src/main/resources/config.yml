@@ -1,7 +1,5 @@
 
 
-immunePlayers: []
-
 prefix: "* "
 
 voteban-usage: "/voteban <player> <reason>"
@@ -13,21 +11,18 @@ missing-args: "Missing arguments or extra arguments. Use command like "
 uuid-null: "Unknown player."
 no-active-polls: "No active polls. Before you will vote, start the poll!"
 cooldown: "You already voted for this player!"
+vote-yourself: "You can`t vote for yourself!"
 ban-yourself: "You cant ban yourself!"
 ban-immune-text: " is an immune player. "
 ban-immune: "Sorry, but you cant ban an immune player!"
-ban-text: "has been banned with reason: "
+ban-text: " has been banned with reason: "
+banned-message: "Banned by /voteban with reason: "
 repeat: "Poll is already open! You cant open again"
 
 component-1: " created a poll"
 component-2: "to ban: "
 component-3: "with reason: "
 button: "[VOTE]"
-
-immune-add: " has been added to immune players!"
-immune-get-true: " is an immune player!"
-immune-get-false: " is not an immune player!"
-immune-remove: " has been removed from immune players!"
 
 ban-msg: "You are banned by /voteban with reason: "
 vote-counted: "Your vote has been counted!"

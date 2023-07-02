@@ -14,12 +14,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
-import java.util.UUID;
 
-import static me.nelson131.voteban.VoteBan.*;
 import static me.nelson131.voteban.afk.AFKManager.*;
-import static me.nelson131.voteban.util.ActivePolls.getActive;
-import static me.nelson131.voteban.util.ActivePolls.removeActive;
+import static me.nelson131.voteban.util.ActivePolls.*;
 import static me.nelson131.voteban.util.Config.*;
 import static me.nelson131.voteban.util.Cooldowns.*;
 import static me.nelson131.voteban.util.MessageBuilder.*;
@@ -35,61 +32,67 @@ public class VoteCommand implements CommandExecutor {
             noPlayer((Player) sender);
             return false;
         }
-        if (command.getName().equalsIgnoreCase("vote")) {
-            Player player = (Player) sender;
 
-            if (args.length == 0) {
-                missingArgs(player, "vote-usage");
+        Player player = (Player) sender;
+
+        if (args.length == 0) {
+            missingArgs(player, "vote-usage");
+            return true;
+        }
+
+        if(getActive(args[0].toUpperCase())){
+            String playerName = player.getName();
+
+            if(args[0].equals(playerName)){
+                voteYourself(player);
                 return true;
             }
 
-            Player target = Bukkit.getPlayer(args[0]);
-
-            if(target == null){
-                uuidNull(player, "vote-usage");
-                return true;
-            }
-
-            UUID targetUUID = target.getUniqueId();
-            UUID playerUUID = player.getUniqueId();
-
-            if (checkCooldown(playerUUID, targetUUID)) {
+            if (checkCooldown(playerName, args[0])) {
                 cooldown(player);
                 return true;
             }
 
-            if (!getActive(playerUUID)) {
+            else {
+                run(player, playerName, args[0]);
+            }
+
+        }
+        else {
+            if(!getActive(args[0])){
                 noActivePolls(player);
                 return true;
             }
-
-            else {
-                addVote(targetUUID);
-                addCooldown(playerUUID, targetUUID);
-                voteCounted(player);
-
-                if (getVote(targetUUID) == CountWithoutAFK() / 2) {
-                        ban(target);
-                        clearVote(targetUUID);
-                        clearReason(targetUUID);
-                        removeCooldown(playerUUID, targetUUID);
-                        removeRepeats(playerUUID);
-                        removeActive(playerUUID);
-                }
-            }
+            uuidNull(player, "uuid-null");
         }
         return true;
     }
 
-    public static void ban(Player player) {
+    public static void ban(String key) {
         Date date = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
-        String reason = getReason(player.getUniqueId());
+        String reason = getReason(key);
 
-        Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), reason, date, null);
+        Bukkit.getBanList(BanList.Type.NAME).addBan(key, reason, date, null);
         for (Player player1 : Bukkit.getOnlinePlayers()) {
             banned(player1, reason);
         }
-        player.kickPlayer(getCFG("ban-msg") + reason);
+        if(Bukkit.getPlayer(key) == null);
+        else Bukkit.getPlayer(key).kickPlayer(getCFG("ban-msg") + reason);
     }
 
+    public static void run(Player player, String playerName, String targetName){
+        addVote(targetName);
+        addCooldown(playerName, targetName);
+        voteCounted(player);
+
+        if (getVote(targetName) == CountWithoutAFK() / 2) {
+            ban(targetName);
+            clearVote(targetName);
+            clearReason(targetName);
+            removeCooldown(playerName, targetName);
+            removeRepeats(targetName);
+            removeActive(targetName);
+
+        }
+    }
 }

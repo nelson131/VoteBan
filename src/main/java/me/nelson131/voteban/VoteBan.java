@@ -4,7 +4,6 @@ import me.nelson131.voteban.afk.ConnectionListener;
 import me.nelson131.voteban.afk.MoveListener;
 import me.nelson131.voteban.afk.PlayersListCommand;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,11 +13,11 @@ public class VoteBan extends JavaPlugin {
 
     public static Plugin plugin = VoteBan.getPlugin();
 
-    public static Map<UUID, Integer> votes = new HashMap<>();
-    public static Map<UUID, String> reasons = new HashMap<>();
-    public static Map<UUID, Set<UUID>> cooldowns = new HashMap<>();
-    public static Map<UUID, Boolean> repeats = new HashMap<>();
-    public static Set<UUID> active = new HashSet<>();
+    public static Map<String, Integer> votes = new HashMap<>();
+    public static Map<String, String> reasons = new HashMap<>();
+    public static Map<String, Set<String>> cooldowns = new HashMap<>();
+    public static Map<String, Boolean> repeats = new HashMap<>();
+    public static Set<String> active = new HashSet<>();
 
     FileConfiguration config = getConfig();
 
@@ -32,7 +31,6 @@ public class VoteBan extends JavaPlugin {
 
         getCommand("voteban").setExecutor(new PollCommand());
         getCommand("vote").setExecutor(new VoteCommand());
-        getCommand("immune").setExecutor(new ImmunityCommand());
         getCommand("players").setExecutor(new PlayersListCommand());
 
         getServer().getPluginManager().registerEvents(new ConnectionListener(), this);
