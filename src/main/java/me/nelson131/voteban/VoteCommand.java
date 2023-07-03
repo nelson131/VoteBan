@@ -77,7 +77,7 @@ public class VoteCommand implements CommandExecutor {
         for (Player player1 : Bukkit.getOnlinePlayers()) {
             banned(player1, reason);
         }
-        if (player == null) player.kickPlayer(getCFG("ban-msg") + reason);
+        if (player != null) player.kickPlayer(getCFG("ban-msg") + reason);
     }
 
     public static void run(Player player, String playerName, String targetName){
