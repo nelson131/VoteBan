@@ -1,5 +1,4 @@
 
-
 prefix: "* "
 
 voteban-usage: "/voteban <player> <reason>"

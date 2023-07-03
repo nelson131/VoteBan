@@ -71,13 +71,13 @@ public class VoteCommand implements CommandExecutor {
     public static void ban(String key) {
         Date date = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
         String reason = getReason(key);
+        Player player = Bukkit.getPlayer(key);
 
         Bukkit.getBanList(BanList.Type.NAME).addBan(key, reason, date, null);
         for (Player player1 : Bukkit.getOnlinePlayers()) {
             banned(player1, reason);
         }
-        if(Bukkit.getPlayer(key) == null);
-        else Bukkit.getPlayer(key).kickPlayer(getCFG("ban-msg") + reason);
+        if (player == null) player.kickPlayer(getCFG("ban-msg") + reason);
     }
 
     public static void run(Player player, String playerName, String targetName){
